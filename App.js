@@ -200,48 +200,83 @@ import ReactDOM from 'react-dom';
 //
 //
 // }
+// class App extends React.Component {
+//     constructor(){
+//         super();
+//         this.state = {data: [
+//             {id:1, name:"Nicolas"},
+//             {id:2, name:"Jorge"},
+//             {id:3, name:"Renan"},
+//             {id:4, name:"João"},
+//             {id:5, name:"Camila"},
+//             {id:6, name:"Cintia"},
+//             {id:7, name:"Flavio"},
+//             {id:8, name:"Marcus"},
+//             {id:9, name:"Dayane"},
+//             {id:10, name:"Gabriel"},
+//             {id:11, name:"Cesar"},
+//             {id:12, name:"Suelen"},
+//             {id:13, name:"Bruno"},
+//             {id:14, name:"Gustavo"},
+//             {id:15, name:"Egg"},
+//             {id:16, name:"Foo"},
+//             {id:17, name:"Bar"},
+//             {id:18, name:"xpto"}
+//         ]
+//
+//         }
+//     }
+//     render(){
+//         let rows = this.state.data.map(person =>{
+//             return <PersonRow key={person.id} data={person}/>
+//         })
+//         return (<tabel className="table table-striped">
+//             <tbody>{rows}</tbody>
+//         </tabel>)
+//     }
+// }
+//
+// const PersonRow = (props) => {
+//     return(<tr>
+//         <td>{props.data.id}</td>
+//         <td>{props.data.name}</td>
+//     </tr>)
+// }
+
+
 class App extends React.Component {
     constructor(){
         super();
-        this.state = {data: [
-            {id:1, name:"Nicolas"},
-            {id:2, name:"Jorge"},
-            {id:3, name:"Renan"},
-            {id:4, name:"João"},
-            {id:5, name:"Camila"},
-            {id:6, name:"Cintia"},
-            {id:7, name:"Flavio"},
-            {id:8, name:"Marcus"},
-            {id:9, name:"Dayane"},
-            {id:10, name:"Gabriel"},
-            {id:11, name:"Cesar"},
-            {id:12, name:"Suelen"},
-            {id:13, name:"Bruno"},
-            {id:14, name:"Gustavo"},
-            {id:15, name:"Egg"},
-            {id:16, name:"Foo"},
-            {id:17, name:"Bar"},
-            {id:18, name:"xpto"}
-        ]
-
+        this.state = {
+            input: '/* add your jsx here*/',
+            output:'',
+            err:''
+        };
+        this.update = this.update.bind(this);
+    }
+    update(e) {
+        let code = e.target.value;
+        try {
+            this.setState({
+                output: babel.transform(code, {stage:0, loose:'all'}).code,
+                err:''
+            })
+        }catch(err){
+            this.setState({err:err.message})
         }
     }
     render(){
-        let rows = this.state.data.map(person =>{
-            return <PersonRow key={person.id} data={person}/>
-        })
-        return (<tabel className="table table-striped">
-            <tbody>{rows}</tbody>
-        </tabel>)
+        return (<div>
+            <header>{this.state.err}</header>
+            <div className="container">
+                <textarea className="form-control"
+                    onChange={this.update}
+                    defaultValue={this.state.input}>
+                </textarea>
+                <pre>{this.state.output}</pre>
+            </div>
+        </div>)
     }
 }
-
-const PersonRow = (props) => {
-    return(<tr>
-        <td>{props.data.id}</td>
-        <td>{props.data.name}</td>
-    </tr>)
-}
-
 export default App;
 // export default Wrapper;
